@@ -15,7 +15,7 @@
           Delete Notice?
         </h2>
         <p className="text-sm text-gray-500 text-center mb-6">
-          <span className="font-medium text-gray-700">"{notice.title}"</span> permanently delete ho jayegi. Ye action undo nahi hogi.
+       <span className="font-medium text-gray-700">&quot;{notice.title}&quot;</span> permanently delete ho jayegi. Ye action undo nahi hogi.
         </p>
 
         {/* Buttons */}
