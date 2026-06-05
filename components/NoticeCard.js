@@ -1,45 +1,61 @@
- import Link from 'next/link'
-import { format, isPast } from 'date-fns'
+import Link from 'next/link'
+import { format } from 'date-fns'
 
 export default function NoticeCard({ notice, onDelete }) {
-  const isExpired = isPast(new Date(notice.publishDate))
   const isUrgent = notice.priority === 'Urgent'
   const isUpdated = notice.updatedAt !== notice.createdAt
 
   return (
     <div className={`
-      bg-white rounded-lg shadow-sm border-l-4 p-5 relative
-      ${isExpired ? 'opacity-60 bg-gray-50' : ''}
+      bg-white rounded-lg shadow-sm border-l-4 p-5 relative flex flex-col justify-between h-full
       ${isUrgent ? 'border-l-red-500' : 'border-l-blue-500'}
     `}>
+      <div>
+        {/* Top Badges */}
+        <div className="flex items-center gap-2 mb-2">
+          {isUrgent && (
+            <span className="bg-red-100 text-red-600 text-xs font-bold px-2 py-0.5 rounded">
+              URGENT
+            </span>
+          )}
+          {isUpdated && (
+            <span className="bg-blue-50 text-blue-500 text-xs font-medium px-2 py-0.5 rounded">
+              Updated
+            </span>
+          )}
+        </div>
 
-      {/* Top Badges */}
-      <div className="flex items-center gap-2 mb-2">
-        {isUrgent && (
-          <span className="bg-red-100 text-red-600 text-xs font-bold px-2 py-0.5 rounded">
-            URGENT
-          </span>
-        )}
-        {isExpired && (
-          <span className="bg-gray-100 text-gray-500 text-xs font-medium px-2 py-0.5 rounded">
-            Expired
-          </span>
-        )}
-        {isUpdated && !isExpired && (
-          <span className="bg-blue-50 text-blue-500 text-xs font-medium px-2 py-0.5 rounded">
-            Updated
-          </span>
-        )}
+        {/* 🔥 BONUS: Image Rendering */}
+{notice.imageUrl && notice.imageUrl.trim() !== "" ? (
+  <div className="mb-3 w-full h-40 relative rounded-md overflow-hidden bg-gray-100">
+    <img 
+      src={notice.imageUrl} 
+      alt={notice.title} 
+      className="w-full h-full object-cover"
+      onError={(e) => { 
+        e.target.src = 'https://placehold.co/600x400/f3f4f6/2563eb?text=Notice'; 
+      }} 
+    />
+  </div>
+) : (
+  <div className="mb-3 w-full h-40 relative rounded-md overflow-hidden bg-gray-100">
+    <img 
+      src="https://placehold.co/600x400/f3f4f6/2563eb?text=Notice" 
+      alt="Default Notice" 
+      className="w-full h-full object-cover"
+    />
+  </div>
+)}
+
+        {/* Title */}
+        <h2 className="text-base font-bold text-gray-900 mb-1">{notice.title}</h2>
+
+        {/* Body */}
+        <p className="text-sm text-gray-500 mb-4 line-clamp-3">{notice.body}</p>
       </div>
 
-      {/* Title */}
-      <h2 className="text-base font-bold text-gray-900 mb-1">{notice.title}</h2>
-
-      {/* Body */}
-      <p className="text-sm text-gray-500 mb-4 line-clamp-2">{notice.body}</p>
-
       {/* Bottom Row */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mt-auto pt-2 border-t border-gray-50">
         <div className="flex items-center gap-2">
           <span className="bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded">
             {notice.category}
